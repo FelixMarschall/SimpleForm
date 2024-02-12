@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Optional;
+
 import static java.lang.Thread.sleep;
 
 @Controller
@@ -18,6 +20,16 @@ public class ToolController {
     public String helloWorld(Model model) {
         model.addAttribute("message", "Hello World");
         return "index";
+    }
+
+    @GetMapping("/login")
+    public String login(@RequestParam Optional<String> error, Model model) {
+        if (error.isPresent()) {
+            log.warn("Invalid username or password");
+            model.addAttribute("error", "Invalid username or password");
+        }
+        log.info("Login page accessed");
+        return "login";
     }
 
     @GetMapping("/admin")
