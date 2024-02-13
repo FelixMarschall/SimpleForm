@@ -14,6 +14,7 @@
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
             <button type="submit">Login</button>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
         </form>
     </p>
 </main>
