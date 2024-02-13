@@ -35,7 +35,7 @@
                 <label for="description">Description</label>
                 <input type="text" id="description" name="description" required/>
                 <label for="price">Price</label>
-                <input type="number" id="price" name="price" min="0" aria-invalid="" required/>
+                <input type="number" id="price" name="price" min="0.0" step="0.1" aria-invalid="" required/>
                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </form>
             </p>
@@ -48,7 +48,9 @@
                         onclick="toggleModal(event)"
                 >Cancel</a
                 >
-                <button id="button-send" style="width: 30%" type="submit" form="new-item" data-target="modal-example">Create</button>
+                <button id="button-send" style="width: 30%" type="submit" form="new-item" data-target="modal-example">
+                    Create
+                </button>
             </footer>
         </article>
     </dialog>
@@ -72,11 +74,12 @@
                 <td>${item.description}</td>
                 <td>${item.price}</td>
                 <td><i data-feather="edit"></i></td>
-                <td><i data-feather="trash-2"></i></td>
+                <td><a onclick="deleteItem(event, ${item.id})"><i data-feather="trash-2"></i></a></td>
             </tr>
         </#list>
         </tbody>
     </table>
+    <script src="/js/delete.js"></script>
     </p>
 </main>
 <#include "fragments/end_script.ftl">

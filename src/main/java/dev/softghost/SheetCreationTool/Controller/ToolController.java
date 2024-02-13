@@ -76,12 +76,20 @@ public class ToolController {
 
     @PostMapping("/admin")
     public ResponseEntity<String> addItem(@RequestParam String name, @RequestParam String description, @RequestParam double price, Model model) throws InterruptedException {
-        //sleep(1000);
         Thread.sleep(10000);
         Item item = new Item(name, description, price);
         itemRepository.save(item);
         log.info("Item added: " + item);
         model.addAttribute("message", "Item added: " + item);
         return ResponseEntity.ok("item added" + item);
+    }
+
+    @DeleteMapping("/admin/{idStr}")
+    public ResponseEntity<String> deleteItem(Model model, @PathVariable String idStr) {
+        int id = Integer.parseInt(idStr);
+        itemRepository.deleteById(id);
+        log.info("Item deleted: " + id);
+        model.addAttribute("message", "Item deleted: " + id);
+        return ResponseEntity.ok("item deleted" + id);
     }
 }
