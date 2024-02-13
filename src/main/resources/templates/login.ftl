@@ -1,17 +1,8 @@
 <html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="light dark"/>
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
-    />
-    <title>Hello world!</title>
-    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-</head>
+<#include "fragments/head.ftl">
 <body>
 <main class="container">
+    <#include "fragments/menu.ftl">
     <h1>Login</h1>
     <p>
         <#if error??>

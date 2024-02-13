@@ -2,6 +2,7 @@ package dev.softghost.SheetCreationTool.Config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,10 +27,10 @@ public class SecSecurityConfig {
                                 .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .failureUrl("/login?error")
-                        .defaultSuccessUrl("/admin")
-                        .permitAll()
+//                        .loginPage("/login")
+//                        .failureUrl("/login?error")
+                                .defaultSuccessUrl("/admin")
+                                .permitAll()
                 )
                 .logout(LogoutConfigurer::permitAll);
         return http.build();
