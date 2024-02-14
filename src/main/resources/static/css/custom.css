@@ -2,3 +2,6 @@
     color: red;
     text-decoration: line-through;
 }
+.clickable-icon {
+    cursor: pointer;
+}

@@ -27,5 +27,6 @@
     </table>
     </p>
 </main>
+<#include "fragments/footer.ftl">
 </body>
 </html>

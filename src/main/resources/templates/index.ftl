@@ -21,5 +21,6 @@
     </form>
 </main>
 <#include "fragments/end_script.ftl">
+<#include "fragments/footer.ftl">
 </body>
 </html>

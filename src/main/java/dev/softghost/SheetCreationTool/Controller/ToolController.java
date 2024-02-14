@@ -4,6 +4,7 @@ import dev.softghost.SheetCreationTool.Model.Item;
 import dev.softghost.SheetCreationTool.Services.InventoryRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,7 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.ResourceBundle;
 
 import static java.lang.Thread.sleep;
 
@@ -39,7 +42,6 @@ public class ToolController {
             log.warn("Invalid username or password");
             model.addAttribute("error", "Invalid username or password");
         }
-        log.info("Login page accessed");
         return "login";
     }
 
@@ -74,9 +76,19 @@ public class ToolController {
         return "inventory";
     }
 
+    @GetMapping("/inventory/{id}")
+    public ResponseEntity<Item> getItem(@PathVariable Integer id) {
+        Optional<Item> item = itemRepository.findById(id);
+        if (item.isPresent()) {
+            return ResponseEntity.ok(item.get());
+        } else {
+            log.warn("Item not found: " + id);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/admin")
     public ResponseEntity<String> addItem(@RequestParam String name, @RequestParam String description, @RequestParam double price, Model model) throws InterruptedException {
-        Thread.sleep(10000);
         Item item = new Item(name, description, price);
         itemRepository.save(item);
         log.info("Item added: " + item);
@@ -84,12 +96,27 @@ public class ToolController {
         return ResponseEntity.ok("item added" + item);
     }
 
-    @DeleteMapping("/admin/{idStr}")
-    public ResponseEntity<String> deleteItem(Model model, @PathVariable String idStr) {
-        int id = Integer.parseInt(idStr);
+    @DeleteMapping("/admin/{id}")
+    public ResponseEntity<String> deleteItem(@PathVariable Integer id) {
         itemRepository.deleteById(id);
         log.info("Item deleted: " + id);
-        model.addAttribute("message", "Item deleted: " + id);
         return ResponseEntity.ok("item deleted" + id);
     }
-}
+
+    @PutMapping("/admin/{id}")
+    public ResponseEntity<String> updateItem(@RequestBody Item item) {
+        try {
+            itemRepository.findById(item.getId())
+                    .orElseThrow(() -> new NoSuchElementException("Item not found with id " + item.getId()));
+            itemRepository.save(item);
+            log.info("Item updated: " + item);
+            return ResponseEntity.ok("Item updated: " + item);
+        } catch (NoSuchElementException e) {
+            log.error(e.getMessage(), e);
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            log.error("Error updating item", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error updating item");
+        }
+    }
+}   
